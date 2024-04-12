@@ -1,3 +1,6 @@
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
