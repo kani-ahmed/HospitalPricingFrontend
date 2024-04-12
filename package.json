@@ -1,0 +1,27 @@
+{
+  "name": "recommendation-app-frontend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "express": "^4.19.2",
+    "lodash": "^4.17.21",
+    "primeicons": "^7.0.0",
+    "primevue": "^3.50.0",
+    "serve-static": "^1.15.0",
+    "vue": "^3.4.21",
+    "vue-autocomplete": "^0.0.2",
+    "vue-multiselect": "^3.0.0-beta.3",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.1.6"
+  }
+}
