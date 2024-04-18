@@ -270,7 +270,7 @@ export default {
         });
 
         // Send request to the backend
-        const response = await axios.post('http://127.0.0.1:5000/api/comprehend-medical', {
+        const response = await axios.post('http://ec2-3-84-37-171.compute-1.amazonaws.com/api/comprehend-medical', {
           user_chatbox_data: JSON.stringify({
             state: this.state,
             city: this.city,
@@ -510,7 +510,6 @@ export default {
 }
 
 .filter-search-container input[type="text"] {
-  //flex-grow: 1;
   justify-content: space-between;
   padding: 0.5rem;
   border-radius: 4px;
