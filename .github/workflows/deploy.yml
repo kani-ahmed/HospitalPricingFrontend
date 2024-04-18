@@ -26,10 +26,10 @@ jobs:
         run: npm install
 
       - name: Lint with ESLint
-        run: npm run lint  # Uses the lint script from package.json
+        run: npm run lint
 
       - name: Security check with npm audit
-        run: npm audit  # Checks for vulnerabilities in dependencies
+        run: npm audit
 
   build-and-deploy:
     needs: lint-and-security
@@ -57,7 +57,7 @@ jobs:
           key: ${{ secrets.AWS_DEPLOY_KEY }}
           source: "./dist/*"
           target: ${{ env.TARGET_DIRECTORY }}/dist
-          rm: true  # This will remove all files in the target directory before uploading the new ones
+          rm: true
 
       - name: Restart PM2 process
         uses: appleboy/ssh-action@master
@@ -67,5 +67,4 @@ jobs:
           key: ${{ secrets.AWS_DEPLOY_KEY }}
           script: |
             cd ${{ env.TARGET_DIRECTORY }}
-            npm install --production  # Install production dependencies
             pm2 restart ecosystem.config.cjs  # Restart application using PM2
