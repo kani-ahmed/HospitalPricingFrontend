@@ -9,11 +9,11 @@ const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Serve the built files from the "dist" directory
-app.use('/', serveStatic(path.join(__dirname, '/dist')));
+app.use('/', serveStatic(path.join(__dirname, 'dist')));
 
 // Serve the index.html file for all routes
 app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(__dirname, '/index.html'));
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 const port = process.env.PORT || 3000;
