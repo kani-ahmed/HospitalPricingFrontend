@@ -55,8 +55,12 @@ jobs:
           host: ${{ env.EC2_SSH_HOST }}
           username: ${{ env.EC2_USER }}
           key: ${{ secrets.AWS_DEPLOY_KEY }}
-          source: "./dist/*"
-          target: ${{ env.TARGET_DIRECTORY }}/dist
+          source: |
+            ./dist/*
+            ./server.js
+            ./ecosystem.config.cjs
+            ./index.html
+          target: ${{ env.TARGET_DIRECTORY }}
           rm: true
 
       - name: Restart PM2 process
