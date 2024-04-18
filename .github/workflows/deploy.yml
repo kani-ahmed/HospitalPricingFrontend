@@ -67,5 +67,5 @@ jobs:
           key: ${{ secrets.AWS_DEPLOY_KEY }}
           script: |
             source $HOME/.nvm/nvm.sh  # Load NVM
-            cd ${{ env.TARGET_DIRECTORY }}:
+            cd ${{ env.TARGET_DIRECTORY }}
             pm2 restart ecosystem.config.cjs  # Restart application using PM2
