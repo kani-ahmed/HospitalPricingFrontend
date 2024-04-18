@@ -56,7 +56,7 @@ jobs:
           username: ${{ env.EC2_USER }}
           key: ${{ secrets.AWS_DEPLOY_KEY }}
           source: "./dist/*"
-          target: "${{ env.TARGET_DIRECTORY }}/dist/"
+          target: "${{ env.TARGET_DIRECTORY }}"
           rm: true
 
       - name: Deploy server and config files to EC2
