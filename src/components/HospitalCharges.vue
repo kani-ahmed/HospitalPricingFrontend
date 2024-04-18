@@ -328,9 +328,6 @@ export default {
   },
 };
 </script>
-
-
-
 <style scoped>
 .hospital-charges {
   max-width: 100%;
@@ -366,11 +363,10 @@ h1 {
 }
 
 .search-btn {
-  max-width: 150px; /* Adjust the max width of the button as needed */
+  max-width: 150px;
   max-height: 40px;
   margin-top: 17px;
-  //margin: auto; /* Centers the button within its container */
-  display: block; /* Makes the button a block-level element, enabling margin auto to work */
+  display: block;
 }
 
 .input, .btn, .vue-multiselect {
