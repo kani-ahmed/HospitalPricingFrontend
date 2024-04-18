@@ -55,13 +55,22 @@ jobs:
           host: ${{ env.EC2_SSH_HOST }}
           username: ${{ env.EC2_USER }}
           key: ${{ secrets.AWS_DEPLOY_KEY }}
+          source: "./dist/*"
+          target: "${{ env.TARGET_DIRECTORY }}/dist"
+          rm: true
+
+      - name: Deploy server and config files to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ env.EC2_SSH_HOST }}
+          username: ${{ env.EC2_USER }}
+          key: ${{ secrets.AWS_DEPLOY_KEY }}
           source: |
-            ./dist/*
             ./server.js
             ./ecosystem.config.cjs
             ./index.html
           target: ${{ env.TARGET_DIRECTORY }}
-          rm: true
+          rm: false
 
       - name: Restart PM2 process
         uses: appleboy/ssh-action@master
