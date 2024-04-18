@@ -55,7 +55,7 @@ jobs:
           host: ${{ env.EC2_SSH_HOST }}
           username: ${{ env.EC2_USER }}
           key: ${{ secrets.AWS_DEPLOY_KEY }}
-          source: "./dist/"
+          source: "./dist/*"
           target: "${{ env.TARGET_DIRECTORY }}/dist/"
           rm: true
 
