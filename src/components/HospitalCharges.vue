@@ -203,7 +203,7 @@ export default {
     },
     async fetchCities() {
       try {
-        const response = await axios.get('http://localhost:5000/api/cities');
+        const response = await axios.get('http://ec2-3-84-37-171.compute-1.amazonaws.com/api/cities');
         this.allCities = response.data;
         this.filterCitySuggestions();
       } catch (error) {
@@ -215,7 +215,7 @@ export default {
     },
     async fetchZipcodes() {
       try {
-        const response = await axios.get('http://localhost:5000/api/zipcodes', {
+        const response = await axios.get('http://ec2-3-84-37-171.compute-1.amazonaws.com/api/zipcodes', {
           params: { city: this.city }
         });
         this.allZipcodes = response.data;
@@ -233,7 +233,7 @@ export default {
         return;
       }
       try {
-        const response = await axios.get('http://localhost:5000/api/hospitals', {
+        const response = await axios.get('http://ec2-3-84-37-171.compute-1.amazonaws.com/api/hospitals', {
           params: { zipcode: this.zipcode }
         });
         this.allHospitals = response.data;
@@ -251,7 +251,7 @@ export default {
         params.hospital = this.filterQueries.Hospital;
       }
       try {
-        const response = await axios.get('http://localhost:5000/api/payers', { params });
+        const response = await axios.get('http://ec2-3-84-37-171.compute-1.amazonaws.com/api/payers', { params });
         this.allPayers = response.data;
         this.filterPayerSuggestions();
       } catch (error) {
@@ -272,7 +272,7 @@ export default {
         filterQuery: this.filterQueries[filter.name]
       }));
       try {
-        const response = await axios.post('http://localhost:5000/api/hospital_charges', {
+        const response = await axios.post('http://ec2-3-84-37-171.compute-1.amazonaws.com/api/hospital_charges', {
           city: this.city,
           zipcode: this.zipcode,
           page: this.page,
