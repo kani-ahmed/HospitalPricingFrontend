@@ -56,8 +56,9 @@ jobs:
           username: ${{ env.EC2_USER }}
           key: ${{ secrets.AWS_DEPLOY_KEY }}
           source: "./dist/*"
-          target: "${{ env.TARGET_DIRECTORY }}"
-          rm: true
+          target: "${{ env.TARGET_DIRECTORY }}/dist/"
+          strip_components: 1
+          overwrite: true
 
       - name: Deploy server and config files to EC2
         uses: appleboy/scp-action@master
