@@ -71,10 +71,7 @@ jobs:
           host: ${{ env.EC2_SSH_HOST }}
           username: ${{ env.EC2_USER }}
           key: ${{ secrets.AWS_DEPLOY_KEY }}
-          source: |
-            ${{ github.workspace }}/server.js
-            ${{ github.workspace }}/ecosystem.config.cjs
-            ${{ github.workspace }}/index.html
+          source: "server.js, ecosystem.config.cjs, index.html"
           target: ${{ env.TARGET_DIRECTORY }}
           rm: false
 
