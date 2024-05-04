@@ -3,6 +3,7 @@
     <div class="toggle-buttons">
       <button v-if="isLoggedIn" class="toggle-btn" :class="{ active: activeButton === 'home' }" @click="setActiveButton('home')">HealthMap Chat</button>
       <button v-if="isLoggedIn" class="toggle-btn" :class="{ active: activeButton === 'hospital-charges' }" @click="setActiveButton('hospital-charges')">Query Hospital Charges</button>
+      <button v-if="isLoggedIn" class="toggle-btn" :class="{ active: activeButton === 'socialmedia' }" @click="setActiveButton('socialmedia')">Social Media</button>
       <button v-if="!isLoggedIn" class="toggle-btn" :class="{ active: activeButton === 'login' }" @click="setActiveButton('login')">Login</button>
       <button v-if="!isLoggedIn" class="toggle-btn" :class="{ active: activeButton === 'register' }" @click="setActiveButton('register')">Register</button>
       <button v-if="isLoggedIn" class="toggle-btn-logout" @click="logout">Logout</button>
@@ -40,6 +41,9 @@ export default {
       }
       else if (button === 'register') {
         this.$router.push('/register');
+      }
+      else if (button === 'socialmedia') {
+        this.$router.push('/socialmedia');
       }
     },
   },

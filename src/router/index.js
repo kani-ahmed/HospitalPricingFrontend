@@ -7,6 +7,7 @@ import Login from '../components/Loginpage.vue';
 import RegisterPage from "../components/RegisterPage.vue";
 import Loginpage from "../components/Loginpage.vue";
 import store from "../store/index.js";
+import SocialMedia from "@/components/SocialMedia.vue";
 const routes = [
     {
         path: '/', component: ComprehendMedicalApp,
@@ -21,7 +22,13 @@ const routes = [
         }
     },
     { path: '/login', component: Loginpage },
-    { path: '/register', component: RegisterPage }
+    { path: '/register', component: RegisterPage },
+    {
+        path: '/socialmedia', component: SocialMedia,
+        meta: {
+            requiresAuth: true
+        }
+    },
 ];
 
 const router = createRouter({
