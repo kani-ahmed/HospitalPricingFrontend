@@ -2,7 +2,7 @@
   <div class="RegisterPage">
     <!-- Header section of the page containing the title -->
     <header>
-      <h1>Green Wave</h1>
+      <h1>Hospital Recommendation App</h1>
     </header>
 
     <div class="register-form">
@@ -44,7 +44,7 @@ export default {
   methods: {
     register() {
       // Method to handle user registration
-      const apiUrl = 'https://heroku-project-backend-staging-ffb8722f57d5.herokuapp.com/register';
+      const apiUrl = 'http://127.0.0.1:5000/register';
       const userData = {
         username: this.username,
         email: this.email,
@@ -58,7 +58,7 @@ export default {
             if (response.status === 201) {
               console.log("Registration successful!");
               // Redirecting user to the calculator page upon successful registration
-              this.$router.push('/calculator');
+              this.$router.push('/');
             } else {
               // Handling registration error
               console.error('Registration failed:', response.data);

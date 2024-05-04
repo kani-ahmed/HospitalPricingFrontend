@@ -28,7 +28,7 @@ const store = createStore({
       commit('setLoading', true);
       commit('setLoginError', null);
       const loginUrl = 'http://127.0.0.1:5000/login';
-      return axios.post(loginUrl, credentials)
+      return axios.post(loginUrl, credentials, { withCredentials: true })
           .then(response => {
             commit('setLoading', false);
             if (response.data.user_id) {
@@ -36,7 +36,7 @@ const store = createStore({
                 userId: response.data.user_id,
               });
               localStorage.setItem('currentUser', JSON.stringify({ userId: response.data.user_id }));
-              router.push('/calculator');
+              router.push('/');
             } else {
               commit('setLoginError', 'Invalid login credentials.');
               return false;

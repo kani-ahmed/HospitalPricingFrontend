@@ -3,7 +3,7 @@
   <div class="Homepage">
     <header>
       <!-- Header section -->
-      <h1>Green Wave</h1> <!-- Title of the website -->
+      <h1>Hospital Recommendation App</h1> <!-- Title of the website -->
     </header>
 
     <!-- Login form section -->
