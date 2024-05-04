@@ -40,11 +40,11 @@
           <div class="chat-messages">
             <!-- Now using dynamicMessages for displaying -->
             <div v-for="(message, index) in dynamicMessages" :key="index" class="message-container"
-                 :class="{ bot: message.type === 'bot' }">
-              <span class="message-timestamp" :class="message.type">{{ message.timestamp }}</span>
-              <div class="message" :class="{ user: message.type === 'user', bot: message.type === 'bot' }">
-                <span class="message-label" :class="message.type">{{ message.type.toUpperCase() }}</span>
-                <p>{{ message.text }}</p>
+                 :class="{ bot: message.message_type === 'bot' }">
+              <span class="message-timestamp" :class="message.message_type">{{ message.timestamp }}</span>
+              <div class="message" :class="{ user: message.message_type === 'user', bot: message.message_type === 'bot' }">
+                <span class="message-label" :class="message.message_type">{{ message.message_type.toUpperCase() }}</span>
+                <p>{{ message.content }}</p>
               </div>
             </div>
           </div>
@@ -199,6 +199,7 @@ import VueMultiselect from 'vue-multiselect';
 import 'vue-multiselect/dist/vue-multiselect.css';
 import AutoComplete from 'primevue/autocomplete';
 import {debounce} from 'lodash';
+import {mapGetters} from "vuex";
 
 export default {
   components: {
@@ -253,20 +254,24 @@ export default {
     this.debouncedFetchZipcodes = debounce(this.fetchZipcodes, 300);
     this.debouncedFetchHospitals = debounce(this.fetchHospitals, 300);
     this.debouncedFetchPayers = debounce(this.fetchPayers, 300);
+    this.fetchChatbotMessages();
   },
   computed: {
+    ...mapGetters(['currentUser']),
+    // Compute the user ID from currentUser
+    userID() {
+      return this.currentUser ? this.currentUser.userId : null;
+    },
     dynamicMessages() {
-      // Check if we need to filter or search
       if (this.filterType || this.searchTerm) {
         return this.messages.filter(message => {
-          const typeMatch = this.filterType ? message.type === this.filterType : true;
-          const textMatch = this.searchTerm ? message.text.toLowerCase().includes(this.searchTerm.toLowerCase()) : true;
+          const typeMatch = this.filterType ? message.message_type === this.filterType : true;
+          const textMatch = this.searchTerm ? message.content.toLowerCase().includes(this.searchTerm.toLowerCase()) : true;
           return typeMatch && textMatch;
         });
       }
-      // If no filterType and no searchTerm, return all messages
       return this.messages;
-    },
+    }
   },
   methods: {
     resetForm() {
@@ -274,9 +279,20 @@ export default {
       this.city = '';
       this.zipcode = '';
       this.description = '';
-      this.messages = [];
       this.results = [];
       this.filterQueries = {};
+    },
+
+    async fetchChatbotMessages() {
+      const userId = localStorage.getItem('currentUser'); // Assuming you store the user ID in local storage
+      if (userId) {
+        try {
+          const response = await axios.get(`http://127.0.0.1:5000/get_chatbot_messages/${this.userID}`);
+          this.messages = response.data;
+        } catch (error) {
+          console.error('Error fetching chatbot messages:', error);
+        }
+      }
     },
     fetchCitiesOnFocus() {
       if (!this.citySuggestions.length || this.allCities.length) {
@@ -388,11 +404,16 @@ export default {
       }));
       try {
         // Add user message to chat
-        const timestamp = new Date().toLocaleTimeString();
+        const userMessage = {
+          user_id: this.userID,
+          content: this.description,
+          message_type: 'user',
+        };
+        await axios.post('http://127.0.0.1:5000/add_chatbot_message', userMessage);
         this.messages.push({
-          type: 'user',
-          text: this.description,
-          timestamp,
+          message_type: 'user',
+          content: this.description,
+          timestamp: new Date().toLocaleTimeString(),
         });
 
         // Send request to the backend
@@ -428,16 +449,26 @@ export default {
           });
 
           // Construct and push a message indicating that the results are displayed below
+          const botMessage = {
+            user_id: this.userID,
+            content: 'Hospital charges have been fetched successfully. Please see below for details.',
+            message_type: 'bot',
+          };
+          await axios.post('http://127.0.0.1:5000/add_chatbot_message', botMessage);
           this.messages.push({
-            type: 'bot',
-            text: 'Hospital charges have been fetched successfully. Please see below for details.',
+            message_type: 'bot',
+            content: 'Hospital charges have been fetched successfully. Please see below for details.',
             timestamp: new Date().toLocaleTimeString(),
           });
           this.loading = false;
         } else {
           // Handle the case when the API call fails
           console.error('API call failed with status:', response.status);
-          this.messages.push({type: 'bot', text: 'Oops! Something went wrong. Please try again later.'});
+          this.messages.push({
+            message_type: 'bot',
+            content: 'Oops! Something went wrong. Please try again later.',
+            timestamp: new Date().toLocaleTimeString(),
+          });
         }
       } catch (error) {
         console.error('Error:', error);
@@ -757,8 +788,8 @@ export default {
   background-color: #eaeaea;
   color: #b4387a;
   position: absolute;
-  top: -20px;
-  right: 25px;
+  top: -22px;
+  right: 2px;
 }
 
 .chat-messages::-webkit-scrollbar {
