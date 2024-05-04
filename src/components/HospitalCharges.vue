@@ -223,7 +223,10 @@ export default {
       }
     },
     selectCity(event) {
-      this.city = event.value;
+      this.city = event.value || '';
+      if (!event.value) {
+        this.citySuggestions = [];
+      }
     },
     async fetchZipcodes() {
       try {
@@ -237,7 +240,10 @@ export default {
       }
     },
     selectZipcode(event) {
-      this.zipcode = event.value;
+      this.zipcode = event.value || '';
+      if (!event.value) {
+        this.zipcodeSuggestions = [];
+      }
     },
     async fetchHospitals() {
       if (!this.zipcode) {
@@ -254,8 +260,11 @@ export default {
         console.error('Error fetching hospitals:', error);
       }
     },
-    selectHospital(hospital) {
-      this.filterQueries.Hospital = hospital;
+    selectHospital(event) {
+      this.filterQueries.Hospital = event.value || '';
+      if (!event.value) {
+        this.hospitalSuggestions = [];
+      }
     },
     async fetchPayers() {
       const params = { zipcode: this.zipcode };
@@ -271,7 +280,10 @@ export default {
       }
     },
     selectPayer(event) {
-      this.filterQueries.Payer = event.value;
+      this.filterQueries.Payer = event.value || '';
+      if (!event.value) {
+        this.payerSuggestions = [];
+      }
     },
     async fetchHospitalCharges() {
       await this.fetchHospitalChargesWithPage(1);
