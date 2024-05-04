@@ -446,7 +446,7 @@ export default {
     },
 
     getAllUsers() {
-      const url = 'https://heroku-project-backend-staging-ffb8722f57d5.herokuapp.com/get_users';
+      const url = 'http://127.0.0.1:5000/get_users';
       axios.get(url)
           .then(response => {
             if (response.status === 200) {
@@ -462,7 +462,7 @@ export default {
     },
 
     getUserFriendships() {
-      const url = `https://heroku-project-backend-staging-ffb8722f57d5.herokuapp.com/get_friendships/${this.userID}`;
+      const url = `http://127.0.0.1:5000/get_friendships/${this.userID}`;
       axios.get(url)
           .then(response => {
             if (response.status === 200) {
@@ -508,7 +508,7 @@ export default {
     },
 
     sendFriendRequest(userId) {
-      const url = `https://heroku-project-backend-staging-ffb8722f57d5.herokuapp.com/add_friend/${this.userID}/${userId}`;
+      const url = `http://127.0.0.1:5000/add_friend/${this.userID}/${userId}`;
       axios.post(url)
           .then(response => {
             if (response.status === 201) {
@@ -521,7 +521,7 @@ export default {
     },
 
     cancelFriendRequest(userId) {
-      const url = `https://heroku-project-backend-staging-ffb8722f57d5.herokuapp.com/remove_friend/${this.userID}/${userId}`;
+      const url = `http://127.0.0.1:5000/remove_friend/${this.userID}/${userId}`;
       axios.delete(url)
           .then(response => {
             if (response.status === 200) {
@@ -550,7 +550,7 @@ export default {
         console.error('Id is empty');
         return;
       }
-      const url = `https://heroku-project-backend-staging-ffb8722f57d5.herokuapp.com/create_post`;
+      const url = `http://127.0.0.1:5000/create_post`;
 
       axios.post(url, {
         user_id: this.userID,
@@ -562,6 +562,7 @@ export default {
           console.log(this.content);
           this.toastMessage = "Successfuly Created Post.";
           this.$refs.toast.showToast(3000, 'success', this.toastMessage);
+          this.postContent = '';
         } else {
           console.error('Post could not be created.');
           this.toastMessage = "Post could not be created.";
@@ -588,7 +589,7 @@ export default {
 
       console.log("Getting all posts")
 
-      const url = `https://heroku-project-backend-staging-ffb8722f57d5.herokuapp.com/view_my_posts/${this.userID}`;
+      const url = `http://127.0.0.1:5000/view_my_posts/${this.userID}`;
 
       axios.get(url, {
         user_id: this.userID,
@@ -622,7 +623,7 @@ export default {
 
     respondToFriendRequest(userId, action) {
       console.log('Responding to friend request');
-      const url = `https://heroku-project-backend-staging-ffb8722f57d5.herokuapp.com/respond_friend_request/${this.userID}/${userId}`;
+      const url = `http://127.0.0.1:5000/respond_friend_request/${this.userID}/${userId}`;
       axios.post(url, {action})
           .then(response => {
             if (response.status === 200) {
@@ -654,7 +655,7 @@ export default {
     },
     fetchSentMessages() {
       this.selectedMessageCategory = 'sent';
-      const url = `https://heroku-project-backend-staging-ffb8722f57d5.herokuapp.com/sent_messages/${this.userID}`;
+      const url = `http://127.0.0.1:5000/sent_messages/${this.userID}`;
       axios.get(url)
           .then(response => {
             if (response.status === 200) {
@@ -669,7 +670,7 @@ export default {
     },
     fetchReceivedMessages() {
       this.selectedMessageCategory = 'received';
-      const url = `https://heroku-project-backend-staging-ffb8722f57d5.herokuapp.com/received_messages/${this.userID}`;
+      const url = `http://127.0.0.1:5000/received_messages/${this.userID}`;
       axios.get(url)
           .then(response => {
             if (response.status === 200) {
@@ -686,7 +687,7 @@ export default {
       this.selectedMessageCategory = 'send';
     },
     sendMessage() {
-      const url = 'https://heroku-project-backend-staging-ffb8722f57d5.herokuapp.com/send_message';
+      const url = 'http://127.0.0.1:5000/send_message';
       axios.post(url, {
         sender_id: this.userID,
         recipient_id: this.selectedRecipient,
@@ -709,7 +710,7 @@ export default {
       return date.toLocaleDateString();
     },
     fetchUsers() {
-      const url = 'https://heroku-project-backend-staging-ffb8722f57d5.herokuapp.com/get_users';
+      const url = 'http://127.0.0.1:5000/get_users';
       axios.get(url)
           .then(response => {
             if (response.status === 200) {
