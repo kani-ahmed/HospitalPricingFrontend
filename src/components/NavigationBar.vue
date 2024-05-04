@@ -1,24 +1,36 @@
 <template>
   <nav class="navigation">
     <div class="toggle-buttons">
-      <button class="toggle-btn" :class="{ active: activeButton === 'home' }" @click="setActiveButton('home')">HealthMap Chat</button>
-      <button class="toggle-btn" :class="{ active: activeButton === 'hospital-charges' }" @click="setActiveButton('hospital-charges')">Query Hospital Charges</button>
-      <button class="toggle-btn" :class="{ active: activeButton === 'login' }" @click="setActiveButton('login')">Login</button>
-      <button class="toggle-btn" :class="{ active: activeButton === 'register' }" @click="setActiveButton('register')">Register</button>
+      <button v-if="isLoggedIn" class="toggle-btn" :class="{ active: activeButton === 'home' }" @click="setActiveButton('home')">HealthMap Chat</button>
+      <button v-if="isLoggedIn" class="toggle-btn" :class="{ active: activeButton === 'hospital-charges' }" @click="setActiveButton('hospital-charges')">Query Hospital Charges</button>
+      <button v-if="!isLoggedIn" class="toggle-btn" :class="{ active: activeButton === 'login' }" @click="setActiveButton('login')">Login</button>
+      <button v-if="!isLoggedIn" class="toggle-btn" :class="{ active: activeButton === 'register' }" @click="setActiveButton('register')">Register</button>
+      <button v-if="isLoggedIn" class="toggle-btn-logout" @click="logout">Logout</button>
     </div>
   </nav>
 </template>
 
 <script>
+import { mapGetters, mapActions, mapState } from 'vuex';
+
 export default {
-  data() {
-    return {
-      activeButton: 'home',
-    };
+  computed: {
+    ...mapGetters(['currentUser']), // Map currentUser getter from Vuex store
+    ...mapState(['activeButton']),
+    isLoggedIn() {
+      return !!this.currentUser; // Check if user is logged in
+    }
   },
   methods: {
+    ...mapActions(['logoutUser']), // Map logoutUser action from Vuex store
+    logout() {
+      this.logoutUser(); // Call logoutUser action when logout button is clicked
+    },
     setActiveButton(button) {
-      this.activeButton = button;
+      if (this.activeButton !== button) {
+        this.$store.commit('setActiveButton', button);
+      }
+      this.$store.commit('setActiveButton', button);
       if (button === 'home') {
         this.$router.push('/');
       } else if (button === 'hospital-charges') {
@@ -56,6 +68,26 @@ export default {
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+.toggle-btn-logout {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.toggle-btn-logout:hover {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  background-color: red;
+  color: white;
 }
 
 .toggle-btn:hover {

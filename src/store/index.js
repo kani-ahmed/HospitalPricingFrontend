@@ -9,7 +9,8 @@ const store = createStore({
     return {
       currentUser: null,
       isLoading: false,
-      loginError: null
+      loginError: null,
+      activeButton: 'login'
     };
   },
   mutations: {
@@ -21,6 +22,9 @@ const store = createStore({
     },
     setLoginError(state, error) {
       state.loginError = error;
+    },
+    setActiveButton(state, button) {
+      state.activeButton = button;
     }
   },
   actions: {
@@ -36,6 +40,7 @@ const store = createStore({
                 userId: response.data.user_id,
               });
               localStorage.setItem('currentUser', JSON.stringify({ userId: response.data.user_id }));
+              commit('setActiveButton', 'home');
               router.push('/');
             } else {
               commit('setLoginError', 'Invalid login credentials.');
@@ -51,6 +56,7 @@ const store = createStore({
     logoutUser({ commit }) {
       localStorage.removeItem('currentUser');
       commit('setCurrentUser', null);
+      commit('setActiveButton', 'login');
       router.push('/login');
     }
   },

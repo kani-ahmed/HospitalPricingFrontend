@@ -55,6 +55,7 @@ export default {
     },
 
     goToRegister() {
+      this.$store.commit('setActiveButton', 'register');
       this.$router.push('/register'); // Redirect to register page
     }
   }
