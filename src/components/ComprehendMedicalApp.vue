@@ -294,11 +294,13 @@ export default {
       // Trigger fetch only if the zipcode is set and hospital suggestions are empty or not yet fetched
       if (this.zipcode && (!this.hospitalSuggestions.length || this.allHospitals.length)) {
         this.fetchHospitals(); // Directly call fetch without debounce to immediately show suggestions
+      } else {
+        this.hospitalSuggestions = [];
       }
     },
 
     fetchPayersOnFocus() {
-      if ((!this.payerSuggestions.length || this.payerSuggestions.length) || this.filterQueries.Hospital || this.zipcode) {
+      if ((this.filterQueries.Hospital || this.zipcode) && (!this.payerSuggestions.length || this.payerSuggestions.length)) {
         this.debouncedFetchPayers();
       }
     },
@@ -466,18 +468,30 @@ export default {
     },
     zipcode(newVal, oldVal) {
       if (newVal !== oldVal) {
-        this.fetchHospitals();
+        if (newVal) {
+          this.fetchHospitals();
+        } else {
+          this.hospitalSuggestions = [];
+        }
       }
     },
     'filterQueries.Hospital'(newValue) {
-      this.debouncedFetchHospitals();
+      if (newValue) {
+        this.debouncedFetchHospitals();
+      } else {
+        this.hospitalSuggestions = [];
+      }
     },
     'filterQueries.Payer'(newValue, oldValue) {
       if (newValue !== oldValue) {
-        this.debouncedFetchPayers();
+        if (newValue) {
+          this.debouncedFetchPayers();
+        } else {
+          this.payerSuggestions = [];
+        }
       }
     },
-  },
+  }
 };
 </script>
 

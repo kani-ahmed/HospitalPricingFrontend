@@ -3,6 +3,8 @@
     <div class="toggle-buttons">
       <button class="toggle-btn" :class="{ active: activeButton === 'home' }" @click="setActiveButton('home')">HealthMap Chat</button>
       <button class="toggle-btn" :class="{ active: activeButton === 'hospital-charges' }" @click="setActiveButton('hospital-charges')">Query Hospital Charges</button>
+      <button class="toggle-btn" :class="{ active: activeButton === 'login' }" @click="setActiveButton('login')">Login</button>
+      <button class="toggle-btn" :class="{ active: activeButton === 'register' }" @click="setActiveButton('register')">Register</button>
     </div>
   </nav>
 </template>
@@ -21,6 +23,11 @@ export default {
         this.$router.push('/');
       } else if (button === 'hospital-charges') {
         this.$router.push('/hospital-charges');
+      } else if (button === 'login') {
+        this.$router.push('/login');
+      }
+      else if (button === 'register') {
+        this.$router.push('/register');
       }
     },
   },
