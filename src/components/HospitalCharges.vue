@@ -1,6 +1,18 @@
 <template>
   <div class="hospital-charges">
     <h1>Query Hospital Charges</h1>
+    <div class="logo-container">
+      <img src="@/assets/logo.webp" alt="Logo" class="logo">
+    </div>
+    <div class="heart-rate">
+      <svg version="1.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+           width="150px" height="73px" viewBox="0 0 150 73" enable-background="new 0 0 150 73" xml:space="preserve">
+    <polyline fill="none" stroke="#009B9E" stroke-width="3" stroke-miterlimit="10"
+              points="0,45.486 38.514,45.486 44.595,33.324 50.676,45.486 57.771,45.486 62.838,55.622 71.959,9 80.067,63.729 84.122,45.486 97.297,45.486 103.379,40.419 110.473,45.486 150,45.486"/>
+  </svg>
+      <div class="fade-in"></div>
+      <div class="fade-out"></div>
+    </div>
     <form @submit.prevent="fetchHospitalCharges" class="search-form">
       <div class="form-group">
         <label for="city">City:</label>
@@ -203,19 +215,19 @@ export default {
     },
     async fetchCities() {
       try {
-        const response = await axios.get('http://ec2-3-84-37-171.compute-1.amazonaws.com/api/cities');
+        const response = await axios.get('http://127.0.0.1:5000/api/cities');
         this.allCities = response.data;
         this.filterCitySuggestions();
       } catch (error) {
         console.error('Error fetching cities:', error);
       }
     },
-    selectCity(city) {
-      this.city = city;
+    selectCity(event) {
+      this.city = event.value;
     },
     async fetchZipcodes() {
       try {
-        const response = await axios.get('http://ec2-3-84-37-171.compute-1.amazonaws.com/api/zipcodes', {
+        const response = await axios.get('http://127.0.0.1:5000/api/zipcodes', {
           params: { city: this.city }
         });
         this.allZipcodes = response.data;
@@ -224,8 +236,8 @@ export default {
         console.error('Error fetching zipcodes:', error);
       }
     },
-    selectZipcode(zipcode) {
-      this.zipcode = zipcode;
+    selectZipcode(event) {
+      this.zipcode = event.value;
     },
     async fetchHospitals() {
       if (!this.zipcode) {
@@ -233,7 +245,7 @@ export default {
         return;
       }
       try {
-        const response = await axios.get('http://ec2-3-84-37-171.compute-1.amazonaws.com/api/hospitals', {
+        const response = await axios.get('http://127.0.0.1:5000/api/hospitals', {
           params: { zipcode: this.zipcode }
         });
         this.allHospitals = response.data;
@@ -251,15 +263,15 @@ export default {
         params.hospital = this.filterQueries.Hospital;
       }
       try {
-        const response = await axios.get('http://ec2-3-84-37-171.compute-1.amazonaws.com/api/payers', { params });
+        const response = await axios.get('http://127.0.0.1:5000/api/payers', { params });
         this.allPayers = response.data;
         this.filterPayerSuggestions();
       } catch (error) {
         console.error('Error fetching payers:', error);
       }
     },
-    selectPayer(payer) {
-      this.filterQueries.Payer = payer;
+    selectPayer(event) {
+      this.filterQueries.Payer = event.value;
     },
     async fetchHospitalCharges() {
       await this.fetchHospitalChargesWithPage(1);
@@ -272,7 +284,7 @@ export default {
         filterQuery: this.filterQueries[filter.name]
       }));
       try {
-        const response = await axios.post('http://ec2-3-84-37-171.compute-1.amazonaws.com/api/hospital_charges', {
+        const response = await axios.post('http://127.0.0.1:5000/api/hospital_charges', {
           city: this.city,
           zipcode: this.zipcode,
           page: this.page,
@@ -342,6 +354,111 @@ h1 {
   text-align: center;
   margin-bottom: 2rem;
 }
+
+@keyframes glowing {
+  0%, 100% {
+    box-shadow: 0 0 5px 5px rgba(128, 0, 128, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 20px 20px rgba(128, 0, 128, 0.2);
+  }
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 190px;  /* Adjust to fit the logo */
+  height: 190px;
+  margin: 10px auto;
+}
+
+.logo {
+  width: 170px;
+  height: 170px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Pseudo-element for the rotating glow */
+.logo-container::before {
+  content: '';
+  position: absolute;
+  top: 10px;  /* Adjust positioning based on desired glow size */
+  left: 10px;
+  width: 170px;  /* Same size as the logo */
+  height: 170px;
+  border-radius: 50%;
+  animation: glowing 3s infinite ease-in-out, rotate 10s linear infinite;
+  z-index: 0;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.heart-rate {
+  width: 150px;
+  height: 73px;
+  position: relative;
+  margin: 20px auto;
+  background-color: white;
+}
+
+.fade-in {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  top: 0;
+  right: 0;
+  animation: heartRateIn 2.5s linear infinite;
+}
+
+.fade-out {
+  position: absolute;
+  width: 120%;
+  height: 100%;
+  top: 0;
+  left: -120%;
+  animation: heartRateOut 2.5s linear infinite;
+  background: rgb(255, 255, 255); /* Adjusted rgba value to match #f5f5f5 */
+  background: -moz-linear-gradient(left, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 50%, rgba(245, 245, 245, 0) 100%);
+  background: -webkit-linear-gradient(left, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 50%, rgba(245, 245, 245, 0) 100%);
+  background: -o-linear-gradient(left, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 50%, rgba(245, 245, 245, 0) 100%);
+  background: -ms-linear-gradient(left, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 50%, rgba(245, 245, 245, 0) 100%);
+  background: linear-gradient(to right, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 80%, rgba(245, 245, 245, 0) 100%);
+}
+
+@keyframes heartRateIn {
+  0% {
+    width: 100%;
+  }
+  50% {
+    width: 0;
+  }
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes heartRateOut {
+  0% {
+    left: -120%;
+  }
+  30% {
+    left: -120%;
+  }
+  100% {
+    left: 0;
+  }
+}
+
 
 .search-form {
   display: flex;
