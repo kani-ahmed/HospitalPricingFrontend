@@ -2,11 +2,11 @@
 module.exports = {
     apps: [{
         name: 'hospital-pricing-frontend',
-        script: 'server.js',
+        script: 'server.mjs',
         watch: true,
         env: {
             NODE_ENV: 'production',
-            PORT: 3000  // ensure this is the port your server.js is set to listen on
+            PORT: 3000  // ensure this is the port your server.mjs is set to listen on
         }
     }]
 };
