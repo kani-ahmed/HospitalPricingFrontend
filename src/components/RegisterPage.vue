@@ -64,7 +64,7 @@ export default {
   methods: {
     register() {
       // Method to handle user registration
-      const apiUrl = 'http://54.166.226.221:5000/register';
+      const apiUrl = 'http://54.166.226.221/api/register';
       const userData = {
         username: this.username,
         email: this.email,

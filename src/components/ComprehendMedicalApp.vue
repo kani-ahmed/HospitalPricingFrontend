@@ -287,7 +287,7 @@ export default {
       const userId = localStorage.getItem('currentUser'); // Assuming you store the user ID in local storage
       if (userId) {
         try {
-          const response = await axios.get(`http://54.166.226.221:5000/get_chatbot_messages/${this.userID}`);
+          const response = await axios.get(`http://54.166.226.221/api/get_chatbot_messages/${this.userID}`);
           this.messages = response.data;
         } catch (error) {
           console.error('Error fetching chatbot messages:', error);
@@ -322,7 +322,7 @@ export default {
     },
     async fetchCities() {
       try {
-        const response = await axios.get('http://54.166.226.221:5000/api/cities');
+        const response = await axios.get('http://54.166.226.221/api/cities');
         this.allCities = response.data;
         this.filterCitySuggestions();
       } catch (error) {
@@ -337,7 +337,7 @@ export default {
     },
     async fetchZipcodes() {
       try {
-        const response = await axios.get('http://54.166.226.221:5000/api/zipcodes', {
+        const response = await axios.get('http://54.166.226.221/api/zipcodes', {
           params: {city: this.city}
         });
         this.allZipcodes = response.data;
@@ -358,7 +358,7 @@ export default {
         return;
       }
       try {
-        const response = await axios.get('http://54.166.226.221:5000/api/hospitals', {
+        const response = await axios.get('http://54.166.226.221/api/hospitals', {
           params: {zipcode: this.zipcode}
         });
         this.allHospitals = response.data;
@@ -379,7 +379,7 @@ export default {
         params.hospital = this.filterQueries.Hospital;
       }
       try {
-        const response = await axios.get('http://54.166.226.221:5000/api/payers', {params});
+        const response = await axios.get('http://54.166.226.221/api/payers', {params});
         this.allPayers = response.data;
         this.filterPayerSuggestions();
       } catch (error) {
@@ -409,7 +409,7 @@ export default {
           content: this.description,
           message_type: 'user',
         };
-        await axios.post('http://54.166.226.221:5000/add_chatbot_message', userMessage);
+        await axios.post('http://54.166.226.221/api/add_chatbot_message', userMessage);
         this.messages.push({
           message_type: 'user',
           content: this.description,
@@ -417,7 +417,7 @@ export default {
         });
 
         // Send request to the backend
-        const response = await axios.post('http://54.166.226.221:5000/api/comprehend-medical', {
+        const response = await axios.post('http://54.166.226.221/api/comprehend-medical', {
           user_chatbox_data: JSON.stringify({
             //state: this.state,
             city: this.city,
@@ -454,7 +454,7 @@ export default {
             content: 'Hospital charges have been fetched successfully. Please see below for details.',
             message_type: 'bot',
           };
-          await axios.post('http://54.166.226.221:5000/add_chatbot_message', botMessage);
+          await axios.post('http://54.166.226.221/api/add_chatbot_message', botMessage);
           this.messages.push({
             message_type: 'bot',
             content: 'Hospital charges have been fetched successfully. Please see below for details.',
