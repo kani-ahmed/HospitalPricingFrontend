@@ -15,6 +15,21 @@
     </div>
     <form @submit.prevent="fetchHospitalCharges" class="search-form">
       <div class="form-group">
+        <label for="state">State:</label>
+        <AutoComplete
+            id="state"
+            v-model="state"
+            dropdown
+            :suggestions="stateSuggestions"
+            :virtualScrollerOptions="{ itemSize: 38 }"
+            @input="debouncedFetchStates"
+            @focus="fetchStatesOnFocus"
+            @select="selectState"
+            placeholder="State"
+            required
+        />
+      </div>
+      <div class="form-group">
         <label for="city">City:</label>
         <AutoComplete
             id="city"
@@ -110,8 +125,12 @@
           <th>Cash Discount</th>
           <th>Min Allowed</th>
           <th>Max Allowed</th>
+          <th>Payer Allowed Amount</th>
+          <th>Gross Charge</th>
           <th>Payer</th>
-          <th>IOB Selection</th>
+          <th>State</th>
+          <th>City</th>
+          <th>Zip Code</th>
         </tr>
         </thead>
         <tbody>
@@ -122,8 +141,12 @@
           <td>{{ result.Cash_Discount }}</td>
           <td>{{ result.Deidentified_Min_Allowed }}</td>
           <td>{{ result.Deidentified_Max_Allowed }}</td>
-          <td>{{ result.payer }}</td>
-          <td>{{ result.iobSelection }}</td>
+          <td>{{ result.Payer_Allowed_Amount }}</td>
+          <td>{{result.Gross_Charge}}</td>
+          <td>{{ result.Payer }}</td>
+          <td>{{ result.Location['State'] }}</td>
+          <td>{{ result.Location['City'] }}</td>
+          <td>{{ result.Location['Zipcode'] }}</td>
         </tr>
         </tbody>
       </table>
@@ -152,6 +175,7 @@ export default {
   data() {
     return {
       city: '',
+      state: '',
       zipcode: '',
       page: 1,
       per_page: 10,
@@ -160,6 +184,7 @@ export default {
       selectedFilters: [],
       filterQueries: {},
       citySuggestions: [],
+      stateSuggestions: [],
       zipcodeSuggestions: [],
       hospitalSuggestions: [],
       payerSuggestions: [],
@@ -167,6 +192,7 @@ export default {
       allZipcodes: [],
       allHospitals: [],
       allPayers: [],
+      allStates: [],
       filterOptions: [
         { name: 'Hospital' },
         { name: 'CPT Code' },
@@ -187,6 +213,7 @@ export default {
     this.debouncedFetchZipcodes = debounce(this.fetchZipcodes, 300);
     this.debouncedFetchHospitals = debounce(this.fetchHospitals, 300);
     this.debouncedFetchPayers = debounce(this.fetchPayers, 300);
+    this.debouncedFetchStates = debounce(this.fetchStates, 300);
   },
   methods: {
     fetchCitiesOnFocus() {
@@ -215,15 +242,40 @@ export default {
         this.debouncedFetchPayers();
       }
     },
-    async fetchCities() {
-      try {
-        const response = await axios.get('http://3.211.246.7/api/cities');
-        this.allCities = response.data;
-        this.filterCitySuggestions();
-      } catch (error) {
-        console.error('Error fetching cities:', error);
+
+    fetchStatesOnFocus() {
+      if (!this.stateSuggestions.length || this.allStates.length) {
+        this.debouncedFetchStates();
       }
     },
+    async fetchStates() {
+      try {
+        const response = await axios.get('http://127.0.0.1:5000/api/states');
+        this.allStates = response.data;
+        this.filterStateSuggestions();
+        this.stateSuggestions = this.allStates;
+      } catch (error) {
+        console.error('Error fetching states:', error);
+      }
+    },
+    selectState(event) {
+      this.state = event.value || '';
+      if (!event.value) {
+        this.stateSuggestions = [];
+      }
+    },
+    // adding optional state filter
+    async fetchCities() {
+          try {
+            const response = await axios.get('http://127.0.0.1:5000/api/cities', {
+              params: { state: this.state }
+            });
+            this.allCities = response.data;
+            this.filterCitySuggestions();
+          } catch (error) {
+            console.error('Error fetching cities:', error);
+          }
+        },
     selectCity(event) {
       this.city = event.value || '';
       if (!event.value) {
@@ -232,7 +284,7 @@ export default {
     },
     async fetchZipcodes() {
       try {
-        const response = await axios.get('http://3.211.246.7/api/zipcodes', {
+        const response = await axios.get('http://127.0.0.1:5000/api/zipcodes', {
           params: { city: this.city }
         });
         this.allZipcodes = response.data;
@@ -253,7 +305,7 @@ export default {
         return;
       }
       try {
-        const response = await axios.get('http://3.211.246.7/api/hospitals', {
+        const response = await axios.get('http://127.0.0.1:5000/api/hospitals', {
           params: { zipcode: this.zipcode }
         });
         this.allHospitals = response.data;
@@ -274,7 +326,7 @@ export default {
         params.hospital = this.filterQueries.Hospital;
       }
       try {
-        const response = await axios.get('http://3.211.246.7/api/payers', { params });
+        const response = await axios.get('http://127.0.0.1:5000/api/payers', { params });
         this.allPayers = response.data;
         this.filterPayerSuggestions();
       } catch (error) {
@@ -298,7 +350,8 @@ export default {
         filterQuery: this.filterQueries[filter.name]
       }));
       try {
-        const response = await axios.post('http://3.211.246.7/api/hospital_charges', {
+        const response = await axios.post('http://127.0.0.1:5000/api/hospital_charges', {
+          state: this.state,
           city: this.city,
           zipcode: this.zipcode,
           page: this.page,
@@ -314,6 +367,9 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+    filterStateSuggestions() {
+      this.stateSuggestions = this.allStates.filter(state => state.toLowerCase().includes(this.state.toLowerCase()));
     },
     filterCitySuggestions() {
       this.citySuggestions = this.allCities.filter(city => city.toLowerCase().includes(this.city.toLowerCase()));
@@ -362,6 +418,9 @@ export default {
           this.payerSuggestions = [];
         }
       }
+    },
+    state(newValue) {
+      this.debouncedFetchStates();
     },
   },
 };

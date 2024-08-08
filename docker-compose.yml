@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  vue-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    networks:
+      - airflow-docker_default
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+    environment:
+      NODE_ENV: production
+
+networks:
+  airflow-docker_default:
+    external: true

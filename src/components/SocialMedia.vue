@@ -446,7 +446,7 @@ export default {
     },
 
     getAllUsers() {
-      const url = 'http://3.211.246.7/api/get_users';
+      const url = 'http://127.0.0.1:5000/api/get_users';
       axios.get(url)
           .then(response => {
             if (response.status === 200) {
@@ -462,7 +462,7 @@ export default {
     },
 
     getUserFriendships() {
-      const url = `http://3.211.246.7/api/get_friendships/${this.userID}`;
+      const url = `http://127.0.0.1:5000/api/get_friendships/${this.userID}`;
       axios.get(url)
           .then(response => {
             if (response.status === 200) {
@@ -508,7 +508,7 @@ export default {
     },
 
     sendFriendRequest(userId) {
-      const url = `http://3.211.246.7/api/add_friend/${this.userID}/${userId}`;
+      const url = `http://127.0.0.1:5000/api/add_friend/${this.userID}/${userId}`;
       axios.post(url)
           .then(response => {
             if (response.status === 201) {
@@ -521,7 +521,7 @@ export default {
     },
 
     cancelFriendRequest(userId) {
-      const url = `http://3.211.246.7/api/remove_friend/${this.userID}/${userId}`;
+      const url = `http://127.0.0.1:5000/api/remove_friend/${this.userID}/${userId}`;
       axios.delete(url)
           .then(response => {
             if (response.status === 200) {
@@ -550,7 +550,7 @@ export default {
         console.error('Id is empty');
         return;
       }
-      const url = `http://3.211.246.7/api/create_post`;
+      const url = `http://127.0.0.1:5000/api/create_post`;
 
       axios.post(url, {
         user_id: this.userID,
@@ -589,7 +589,7 @@ export default {
 
       console.log("Getting all posts")
 
-      const url = `http://3.211.246.7/api/view_my_posts/${this.userID}`;
+      const url = `http://127.0.0.1:5000/api/view_my_posts/${this.userID}`;
 
       axios.get(url, {
         user_id: this.userID,
@@ -623,7 +623,7 @@ export default {
 
     respondToFriendRequest(userId, action) {
       console.log('Responding to friend request');
-      const url = `http://3.211.246.7/api/respond_friend_request/${this.userID}/${userId}`;
+      const url = `http://127.0.0.1:5000/api/respond_friend_request/${this.userID}/${userId}`;
       axios.post(url, {action})
           .then(response => {
             if (response.status === 200) {
@@ -655,7 +655,7 @@ export default {
     },
     fetchSentMessages() {
       this.selectedMessageCategory = 'sent';
-      const url = `http://3.211.246.7/api/sent_messages/${this.userID}`;
+      const url = `http://127.0.0.1:5000/api/sent_messages/${this.userID}`;
       axios.get(url)
           .then(response => {
             if (response.status === 200) {
@@ -670,7 +670,7 @@ export default {
     },
     fetchReceivedMessages() {
       this.selectedMessageCategory = 'received';
-      const url = `http://3.211.246.7/api/received_messages/${this.userID}`;
+      const url = `http://127.0.0.1:5000/api/received_messages/${this.userID}`;
       axios.get(url)
           .then(response => {
             if (response.status === 200) {
@@ -687,7 +687,7 @@ export default {
       this.selectedMessageCategory = 'send';
     },
     sendMessage() {
-      const url = 'http://3.211.246.7/api/send_message';
+      const url = 'http://127.0.0.1:5000/api/send_message';
       axios.post(url, {
         sender_id: this.userID,
         recipient_id: this.selectedRecipient,
@@ -710,7 +710,7 @@ export default {
       return date.toLocaleDateString();
     },
     fetchUsers() {
-      const url = 'http://3.211.246.7/api/get_users';
+      const url = 'http://127.0.0.1:5000/api/get_users';
       axios.get(url)
           .then(response => {
             if (response.status === 200) {

@@ -31,7 +31,7 @@ const store = createStore({
     loginUser({ commit }, credentials) {
       commit('setLoading', true);
       commit('setLoginError', null);
-      const loginUrl = 'http://3.211.246.7/api/login';
+      const loginUrl = 'http://127.0.0.1:5000/api/login';
       return axios.post(loginUrl, credentials, { withCredentials: true })
           .then(response => {
             commit('setLoading', false);
